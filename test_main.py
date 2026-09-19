@@ -24,6 +24,22 @@ class PromptManagementTests(unittest.TestCase):
         output = " ".join(str(call) for call in mocked_print.call_args_list)
         self.assertIn("업무 카테고리", output)
 
+    def test_search_finds_prompt_by_title(self):
+        prompts = [prompt.copy() for prompt in main.DEFAULT_PROMPTS]
+        with patch("builtins.input", return_value="이메일"):
+            with patch("builtins.print") as mocked_print:
+                main.search_prompts(prompts)
+
+        output = " ".join(str(call) for call in mocked_print.call_args_list)
+        self.assertIn("이메일 작성", output)
+
+    def test_toggle_favorite_changes_favorite_state(self):
+        prompts = [prompt.copy() for prompt in main.DEFAULT_PROMPTS]
+        with patch("builtins.input", return_value="1"):
+            main.toggle_favorite(prompts)
+
+        self.assertTrue(prompts[0]["favorite"])
+
 
 if __name__ == "__main__":
     unittest.main()
