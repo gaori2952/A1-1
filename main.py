@@ -83,6 +83,42 @@ def list_prompts(prompts, title="전체 프롬프트"):
 		display_prompt(prompt, number)
 
 
+def show_by_category(prompts):
+	"""선택한 카테고리에 속한 프롬프트만 출력합니다."""
+	categories = []
+	for prompt in prompts:
+		if prompt["category"] not in categories:
+			categories.append(prompt["category"])
+
+	if not categories:
+		print("조회할 프롬프트가 없습니다.")
+		return
+
+	print("\n--- 카테고리별 조회 ---")
+	for number, category in enumerate(categories, start=1):
+		print(f"{number}. {category}")
+	choice = read_menu_choice("카테고리 번호: ", 1, len(categories))
+	category = categories[choice - 1]
+	results = [prompt for prompt in prompts if prompt["category"] == category]
+	list_prompts(results, f"{category} 카테고리")
+
+
+def show_prompt_detail(prompts):
+	"""선택한 프롬프트의 제목, 카테고리, 내용을 자세히 출력합니다."""
+	if not prompts:
+		print("상세 정보를 볼 프롬프트가 없습니다.")
+		return
+
+	list_prompts(prompts, "프롬프트 상세 보기")
+	number = read_menu_choice("상세히 볼 프롬프트 번호: ", 1, len(prompts))
+	prompt = prompts[number - 1]
+	print("\n--- 프롬프트 상세 정보 ---")
+	print(f"제목: {prompt['title']}")
+	print(f"카테고리: {prompt['category']}")
+	print(f"즐겨찾기: {'예' if prompt['favorite'] else '아니오'}")
+	print(f"내용: {prompt['content']}")
+
+
 def add_prompt(prompts):
 	"""제목, 내용, 카테고리를 입력받아 새 프롬프트를 추가합니다."""
 	print("\n--- 프롬프트 추가 ---")
@@ -137,11 +173,13 @@ def print_menu():
 	"""메인 메뉴를 출력합니다."""
 	print("\n===== 프롬프트 관리 프로그램 =====")
 	print("1. 전체 프롬프트 보기")
-	print("2. 프롬프트 추가")
-	print("3. 프롬프트 검색")
-	print("4. 즐겨찾기 추가/해제")
-	print("5. 즐겨찾기 목록 보기")
-	print("6. 종료")
+	print("2. 카테고리별 조회")
+	print("3. 프롬프트 상세 보기")
+	print("4. 프롬프트 추가")
+	print("5. 프롬프트 검색")
+	print("6. 즐겨찾기 추가/해제")
+	print("7. 즐겨찾기 목록 보기")
+	print("8. 종료")
 
 
 def run_program():
@@ -151,17 +189,21 @@ def run_program():
 
 	while True:
 		print_menu()
-		choice = read_menu_choice("메뉴 번호: ", 1, 6)
+		choice = read_menu_choice("메뉴 번호: ", 1, 8)
 
 		if choice == 1:
 			list_prompts(prompts)
 		elif choice == 2:
-			add_prompt(prompts)
+			show_by_category(prompts)
 		elif choice == 3:
-			search_prompts(prompts)
+			show_prompt_detail(prompts)
 		elif choice == 4:
-			toggle_favorite(prompts)
+			add_prompt(prompts)
 		elif choice == 5:
+			search_prompts(prompts)
+		elif choice == 6:
+			toggle_favorite(prompts)
+		elif choice == 7:
 			show_favorites(prompts)
 		else:
 			print("프로그램을 종료합니다.")
