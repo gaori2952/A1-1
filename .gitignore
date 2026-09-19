@@ -1,0 +1,12 @@
+# Python이 자동으로 만드는 캐시 파일을 무시합니다.
+__pycache__/
+*.py[cod]
+
+# 가상 환경 폴더를 무시합니다.
+.venv/
+venv/
+env/
+
+# 테스트 및 도구가 만드는 임시 파일을 무시합니다.
+.pytest_cache/
+.coverage
