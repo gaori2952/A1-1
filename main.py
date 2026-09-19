@@ -82,6 +82,8 @@ def list_prompts(prompts, title="전체 프롬프트"):
 	for number, prompt in enumerate(prompts, start=1):
 		display_prompt(prompt, number)
 
+	print(f"총 {len(prompts)}개의 프롬프트")
+
 
 def show_by_category(prompts):
 	"""선택한 카테고리에 속한 프롬프트만 출력합니다."""
