@@ -1,4 +1,5 @@
 import unittest
+from unittest.mock import patch
 
 import main
 
@@ -13,6 +14,15 @@ class PromptManagementTests(unittest.TestCase):
             self.assertIn("content", prompt)
             self.assertIn("category", prompt)
             self.assertIn("favorite", prompt)
+
+    def test_category_view_shows_selected_category(self):
+        prompts = [prompt.copy() for prompt in main.DEFAULT_PROMPTS]
+        with patch("builtins.input", return_value="1"):
+            with patch("builtins.print") as mocked_print:
+                main.show_by_category(prompts)
+
+        output = " ".join(str(call) for call in mocked_print.call_args_list)
+        self.assertIn("업무 카테고리", output)
 
 
 if __name__ == "__main__":
